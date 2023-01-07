@@ -28,9 +28,7 @@ const AddUser = (props) => {
     setErrorMessage(err);
     if (err) return;
 
-    props.onSubmit(
-      enteredUserName.current.value + " (" + enteredAge.current.value + ")"
-    );
+    props.onSubmit(enteredUserName.current.value + " (" + enteredAge.current.value + ")");
     enteredUserName.current.value = "";
     enteredAge.current.value = "";
   };
