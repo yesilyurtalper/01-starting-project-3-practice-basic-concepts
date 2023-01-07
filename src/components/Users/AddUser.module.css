@@ -1,17 +1,17 @@
-.input {
+.form_control {
     margin: 2rem auto;
     padding: 1rem;
     width: 90%;
     max-width: 40rem;
   }
   
-  .input label {
+  .form_control label {
     display: block;
     font-weight: bold;
     margin-bottom: 0.5rem;
   }
   
-  .input input {
+  .form_control input {
     font: inherit;
     display: block;
     width: 100%;
@@ -20,7 +20,17 @@
     margin-bottom: 0.5rem;
   }
   
-  .input input:focus {
+  .form_control input:focus {
     outline: none;
-    border-color: #4f005f;
+    background: #fad0ec;
+    border-color: #8b005d;
+  }
+
+  .invalid_label {
+    color: red;
+  }
+  
+  .invalid_input {
+    border-color: red;
+    background: red ;
   }

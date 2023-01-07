@@ -7,57 +7,86 @@ import ErrorModal from "../UI/ErrorModal";
 const AddUser = (props) => {
   const enteredUserName = useRef();
   const enteredAge = useRef();
-  const [error, setError] = useState();
+  const [errorMessage, setErrorMessage] = useState('');
+  const [nameValid, setNameValid] = useState(true);
+  const [ageValid, setAgeValid] = useState(true);
 
   const submitHandler = (event) => {
     event.preventDefault();
+    setErrorMessage('');
+    let error = false;
 
-    if (
-      enteredUserName.current.value.length === 0 ||
-      enteredAge.current.value.length === 0 ||
-      +enteredAge < 1
-    ) {
-      setError({
-        title: "Invalid input",
-        message: "Please enter a valid name and age",
-      });
+    if (enteredUserName.current.value.length === 0) {
+      setNameValid(false);
+      setErrorMessage("Please enter a nonempty name");
+      error = true;
+    } else setNameValid(true);
+
+    if (enteredAge.current.value.length === 0 || enteredAge.current.value < 1) {
+      setAgeValid(false);
+      setErrorMessage(prev => prev.length>0 ? prev+ ", an age > 1" : "Please enter an age > 1");
+      error = true;
+    } else setAgeValid(true);
+
+    if(error)
       return;
-    }
 
-    console.log(enteredUserName.current.value, enteredAge.current.value);
-    props.onSubmit(enteredUserName.current.value + " (" + enteredAge.current.value + ")");
-    enteredUserName.current.value = ""
+    props.onSubmit(
+      enteredUserName.current.value + " (" + enteredAge.current.value + ")"
+    );
+    enteredUserName.current.value = "";
     enteredAge.current.value = "";
   };
 
   const errorHandler = () => {
-    setError(null);
+    //setGlobalError(null);
   };
 
   return (
     <div>
-      {error && (
+      {/* {globalError && (
         <ErrorModal
-          title={error.title}
-          message={error.message}
+          title={globalError.title}
+          message={globalError.message}
           errorHandler={errorHandler}
         />
-      )}
-      <Card className={classes.input}>
+      )} */}
+
+      <Card className={classes.form_control}>
         <form onSubmit={submitHandler}>
-          <label htmlFor="username">Username</label>
+          <label
+            htmlFor="username"
+            className={!nameValid ? classes.invalid_label : undefined}
+          >
+            Username
+          </label>
           <input
             type="text"
             id="username"
             ref={enteredUserName}
+            className={!nameValid ? classes.invalid_input : undefined}
           />
-          <label htmlFor="age">Age (Years)</label>
+
+          <label
+            htmlFor="age"
+            className={!ageValid ? classes.invalid_label : undefined}
+          >
+            Age (Years)
+          </label>
           <input
             type="number"
             id="age"
             ref={enteredAge}
+            className={!ageValid ? classes.invalid_input : undefined}
           ></input>
+
           <Button type="submit">Add User</Button>
+
+          {errorMessage && (
+            <label id="errorLabel" className={classes.invalid_label} >
+              {errorMessage}
+            </label>
+          )}
         </form>
       </Card>
     </div>
