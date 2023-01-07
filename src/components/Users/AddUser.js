@@ -7,29 +7,26 @@ import ErrorModal from "../UI/ErrorModal";
 const AddUser = (props) => {
   const enteredUserName = useRef();
   const enteredAge = useRef();
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState("");
   const [nameValid, setNameValid] = useState(true);
   const [ageValid, setAgeValid] = useState(true);
 
   const submitHandler = (event) => {
     event.preventDefault();
-    setErrorMessage('');
-    let error = false;
+    let err = "";
 
     if (enteredUserName.current.value.length === 0) {
       setNameValid(false);
-      setErrorMessage("Please enter a nonempty name");
-      error = true;
+      err = "Please enter a nonempty name";
     } else setNameValid(true);
 
     if (enteredAge.current.value.length === 0 || enteredAge.current.value < 1) {
       setAgeValid(false);
-      setErrorMessage(prev => prev.length>0 ? prev+ ", an age > 1" : "Please enter an age > 1");
-      error = true;
+      err = err.length > 0 ? err + ", an age > 1" : "Please enter an age > 1";
     } else setAgeValid(true);
 
-    if(error)
-      return;
+    setErrorMessage(err);
+    if (err) return;
 
     props.onSubmit(
       enteredUserName.current.value + " (" + enteredAge.current.value + ")"
@@ -83,7 +80,7 @@ const AddUser = (props) => {
           <Button type="submit">Add User</Button>
 
           {errorMessage && (
-            <label id="errorLabel" className={classes.invalid_label} >
+            <label id="errorLabel" className={classes.invalid_label}>
               {errorMessage}
             </label>
           )}
