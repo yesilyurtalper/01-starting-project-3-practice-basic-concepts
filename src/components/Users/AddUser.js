@@ -7,9 +7,11 @@ import ErrorModal from "../UI/ErrorModal";
 const AddUser = (props) => {
   const enteredUserName = useRef();
   const enteredAge = useRef();
+  const enteredId = useRef();
   const [errorMessage, setErrorMessage] = useState("");
   const [nameValid, setNameValid] = useState(true);
   const [ageValid, setAgeValid] = useState(true);
+  const [idValid, setIdValid] = useState(true);
 
   const submitHandler = (event) => {
     event.preventDefault();
@@ -25,12 +27,18 @@ const AddUser = (props) => {
       err = err.length > 0 ? err + ", an age > 1" : "Please enter an age > 1";
     } else setAgeValid(true);
 
+    if (enteredId.current.value.length === 0 || enteredId.current.value < 1) {
+      setIdValid(false);
+      err = err.length > 0 ? err + ", an id > 1" : "Please enter an id > 1";
+    } else setIdValid(true);
+
     setErrorMessage(err);
     if (err) return;
 
-    props.onSubmit(enteredUserName.current.value + " (" + enteredAge.current.value + ")");
+    props.onSubmit(enteredUserName.current.value + " (age: " + enteredAge.current.value + ")" + " (id: " + enteredId.current.value + ")");
     enteredUserName.current.value = "";
     enteredAge.current.value = "";
+    enteredId.current.value = "";
   };
 
   const errorHandler = () => {
@@ -73,6 +81,19 @@ const AddUser = (props) => {
             id="age"
             ref={enteredAge}
             className={!ageValid ? classes.invalid_input : undefined}
+          ></input>
+
+          <label
+            htmlFor="userId"
+            className={!idValid ? classes.invalid_label : undefined}
+          >
+            UserId
+          </label>
+          <input
+            type="number"
+            id="userId"
+            ref={enteredId}
+            className={!idValid ? classes.invalid_input : undefined}
           ></input>
 
           <Button type="submit">Add User</Button>
